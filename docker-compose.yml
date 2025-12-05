@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  db:
+    image: ankane/pgvector:pg16
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+      POSTGRES_DB: appdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    environment:
+      APP_ENV: dev
+      DB__URL: postgres+asyncpg://app:app@db:5432/appdb
+      DB__ECHO: "false"
+      OPENAI__API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI__MODEL: gpt-3.5-turbo
+      OPENAI__EMBEDDING_MODEL: text-embedding-3-small
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+volumes:
+  db-data:
