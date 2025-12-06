@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -36,9 +36,9 @@ async def ingest_text(
         )
     except IngestionError as exc:
         logger.exception("admin.ingest_failed", extra={"error": str(exc)})
-        raise HTTPException(status_code=400, detail=str(exc))
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
     global _last_refresh
-    _last_refresh = datetime.now(timezone.utc)
+    _last_refresh = datetime.now(UTC)
     return IngestResponse(document_id=result.document_id, chunks=result.chunks_count)
 
 

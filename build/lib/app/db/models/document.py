@@ -58,7 +58,7 @@ class DocumentChunk(Base):
     content: Mapped[str] = mapped_column(Text, nullable=False)
     embedding: Mapped[list[float]] = mapped_column(EmbeddingType, nullable=False)
     position: Mapped[float] = mapped_column(Float, nullable=False, default=0)
-    metadata: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)
+    chunk_metadata: Mapped[dict[str, Any]] = mapped_column("metadata", JSON, default=dict)
     created_at: Mapped[Any] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     document: Mapped[Document] = relationship("Document", back_populates="chunks", lazy="joined")
@@ -68,5 +68,5 @@ class DocumentChunk(Base):
             "id": str(self.id),
             "score": round(score, 4),
             "content": self.content,
-            "source": self.metadata.get("source", self.document.source if self.document else "unknown"),
+            "source": self.chunk_metadata.get("source", self.document.source if self.document else "unknown"),
         }

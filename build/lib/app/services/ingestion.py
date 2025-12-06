@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Iterable, Sequence
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -22,6 +23,12 @@ class IngestionError(Exception):
     pass
 
 
+@dataclass
+class IngestionResult:
+    document_id: str
+    chunks_count: int
+
+
 class IngestionService:
     def __init__(
         self,
@@ -33,7 +40,7 @@ class IngestionService:
         self._settings = settings or get_settings()
         self._embeddings = embeddings or OpenAIEmbeddingClient(self._settings)
 
-    async def ingest_texts(self, *, tenant_id: str, source: str, texts: Sequence[str]) -> Document:
+    async def ingest_texts(self, *, tenant_id: str, source: str, texts: Sequence[str]) -> IngestionResult:
         if not texts:
             raise IngestionError("No texts provided")
 
@@ -45,6 +52,7 @@ class IngestionService:
         async with self._session_factory() as session:
             async with session.begin():
                 document = Document(tenant_id=tenant_id, title=f"Ingested from {source}", source=source)
+                document.chunks = []
                 session.add(document)
                 await session.flush()
 
@@ -56,7 +64,7 @@ class IngestionService:
                             content=chunk["content"],
                             embedding=embeddings[idx],
                             position=chunk["position"],
-                            metadata={"source": source, "chunk": idx},
+                            chunk_metadata={"source": source, "chunk": idx},
                         )
                     )
 
@@ -64,7 +72,7 @@ class IngestionService:
             logger.info(
                 "ingestion.document_stored", extra={"document_id": str(document.id), "chunks": len(chunks)}
             )
-            return document
+            return IngestionResult(document_id=str(document.id), chunks_count=len(chunks))
 
     async def upsert_customer_accounts(self, *, tenant_id: str, accounts: Iterable[dict]) -> int:
         accounts_list = list(accounts)

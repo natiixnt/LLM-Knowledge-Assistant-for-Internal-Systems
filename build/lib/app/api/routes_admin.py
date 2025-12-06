@@ -31,13 +31,15 @@ async def ingest_text(
     payload: IngestTextRequest, svc: IngestionService = Depends(get_ingestion_service)
 ) -> IngestResponse:
     try:
-        doc = await svc.ingest_texts(tenant_id=payload.tenant_id, source=payload.source, texts=payload.texts)
+        result = await svc.ingest_texts(
+            tenant_id=payload.tenant_id, source=payload.source, texts=payload.texts
+        )
     except IngestionError as exc:
         logger.exception("admin.ingest_failed", extra={"error": str(exc)})
         raise HTTPException(status_code=400, detail=str(exc))
     global _last_refresh
     _last_refresh = datetime.now(timezone.utc)
-    return IngestResponse(document_id=str(doc.id), chunks=len(doc.chunks))
+    return IngestResponse(document_id=result.document_id, chunks=result.chunks_count)
 
 
 @router.get("/status")

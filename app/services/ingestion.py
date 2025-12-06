@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
-from typing import Iterable, Sequence
 
+from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import sessionmaker
 
@@ -10,11 +11,8 @@ from app.core.config import AppSettings, get_settings
 from app.core.logging import get_logger
 from app.db.models.document import Document, DocumentChunk
 from app.db.models.structured_data import CustomerAccount
-from app.services.embeddings import EmbeddingProvider, OpenAIEmbeddingClient
 from app.db.session import get_session_factory
-from fastapi import Depends
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.asyncio import AsyncSession
+from app.services.embeddings import EmbeddingProvider, OpenAIEmbeddingClient
 
 logger = get_logger("app.ingestion")
 

@@ -46,15 +46,15 @@ async def chat(payload: ChatRequest, svc: ChatService = Depends(get_chat_service
             svc.answer(question=payload.question, user_id=payload.user_id, tenant_id=payload.tenant_id),
             timeout=8.0,
         )
-    except asyncio.TimeoutError:
+    except TimeoutError as exc:
         logger.warning("chat.timeout", extra=ctx)
-        raise HTTPException(status_code=504, detail="Upstream LLM timeout")
+        raise HTTPException(status_code=504, detail="Upstream LLM timeout") from exc
     except RetrievalError as exc:
         logger.exception("chat.retrieval_failed", extra=ctx | {"error": str(exc)})
-        raise HTTPException(status_code=500, detail="Context retrieval failed")
+        raise HTTPException(status_code=500, detail="Context retrieval failed") from exc
     except LLMError as exc:
         logger.exception("chat.llm_failed", extra=ctx | {"error": str(exc)})
-        raise HTTPException(status_code=502, detail="LLM provider failed")
+        raise HTTPException(status_code=502, detail="LLM provider failed") from exc
 
     logger.info(
         "chat.success",

@@ -1,18 +1,16 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
 
-from fastapi import Depends, FastAPI
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy.ext.asyncio import AsyncEngine
 
 from app.api.routes_admin import router as admin_router
 from app.api.routes_chat import router as chat_router
 from app.api.routes_health import router as health_router
 from app.core.config import get_settings
 from app.core.logging import setup_logging
-from app.db.session import get_engine, get_session_factory
+from app.db.session import get_engine
 
 
 def create_app() -> FastAPI:

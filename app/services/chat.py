@@ -5,8 +5,8 @@ import time
 from dataclasses import dataclass
 from typing import Protocol
 
-from langchain_core.prompts import ChatPromptTemplate
 from fastapi import Depends
+from langchain_core.prompts import ChatPromptTemplate
 from openai import AsyncOpenAI, OpenAIError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import sessionmaker
