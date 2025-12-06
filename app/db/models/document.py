@@ -5,7 +5,8 @@ from typing import Any
 from uuid import UUID, uuid4
 
 from sqlalchemy import JSON, DateTime, Float, ForeignKey, Index, String, Text, func
-from sqlalchemy.dialects.postgresql import ARRAY, UUID as PGUUID
+from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.types import TypeDecorator
 
@@ -55,7 +56,9 @@ class DocumentChunk(Base):
 
     id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
     tenant_id: Mapped[str] = mapped_column(String(36), nullable=False, index=True)
-    document_id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), ForeignKey("documents.id"), nullable=False)
+    document_id: Mapped[UUID] = mapped_column(
+        PGUUID(as_uuid=True), ForeignKey("documents.id"), nullable=False
+    )
     content: Mapped[str] = mapped_column(Text, nullable=False)
     embedding: Mapped[list[float]] = mapped_column(EmbeddingType, nullable=False)
     position: Mapped[float] = mapped_column(Float, nullable=False, default=0)

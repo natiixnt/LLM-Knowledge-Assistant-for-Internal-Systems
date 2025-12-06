@@ -51,7 +51,7 @@ class OpenAILLMClient:
                 ),
                 timeout=self._timeout,
             )
-        except (asyncio.TimeoutError, OpenAIError) as exc:  # pragma: no cover - network dependent
+        except (TimeoutError, OpenAIError) as exc:  # pragma: no cover - network dependent
             raise LLMError(str(exc)) from exc
         choice = response.choices[0]
         return choice.message.content or ""
