@@ -31,7 +31,9 @@ async def ingest_text(
     payload: IngestTextRequest, svc: IngestionService = Depends(get_ingestion_service)
 ) -> IngestResponse:
     try:
-        result = await svc.ingest_texts(tenant_id=payload.tenant_id, source=payload.source, texts=payload.texts)
+        result = await svc.ingest_texts(
+            tenant_id=payload.tenant_id, source=payload.source, texts=payload.texts
+        )
     except IngestionError as exc:
         logger.exception("admin.ingest_failed", extra={"error": str(exc)})
         raise HTTPException(status_code=400, detail=str(exc))

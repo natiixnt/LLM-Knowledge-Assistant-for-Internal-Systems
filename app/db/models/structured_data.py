@@ -19,7 +19,9 @@ class CustomerAccount(Base):
     segment: Mapped[str] = mapped_column(String(50), nullable=False)
     arr: Mapped[float] = mapped_column(Float, nullable=False)
     notes: Mapped[str] = mapped_column(Text, nullable=True)
-    updated_at: Mapped[Any] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+    updated_at: Mapped[Any] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
 
     def summary(self) -> str:
         segment = self.segment or "unknown"

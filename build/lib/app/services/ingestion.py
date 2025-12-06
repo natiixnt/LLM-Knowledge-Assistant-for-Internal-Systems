@@ -61,7 +61,9 @@ class IngestionService:
                     )
 
             await session.commit()
-            logger.info("ingestion.document_stored", extra={"document_id": str(document.id), "chunks": len(chunks)})
+            logger.info(
+                "ingestion.document_stored", extra={"document_id": str(document.id), "chunks": len(chunks)}
+            )
             return document
 
     async def upsert_customer_accounts(self, *, tenant_id: str, accounts: Iterable[dict]) -> int:
@@ -78,7 +80,9 @@ class IngestionService:
                             notes=account.get("notes", ""),
                         )
                     )
-        logger.info("ingestion.accounts_upserted", extra={"count": len(accounts_list), "tenant_id": tenant_id})
+        logger.info(
+            "ingestion.accounts_upserted", extra={"count": len(accounts_list), "tenant_id": tenant_id}
+        )
         return len(accounts_list)
 
     def _chunk_texts(self, texts: Sequence[str]) -> Iterable[dict[str, float | str]]:

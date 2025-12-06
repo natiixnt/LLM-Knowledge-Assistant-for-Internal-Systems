@@ -13,7 +13,30 @@ class ContextFormatter(logging.Formatter):
         extras = {
             k: v
             for k, v in record.__dict__.items()
-            if k not in {"msg", "args", "levelname", "levelno", "pathname", "filename", "module", "exc_info", "exc_text", "stack_info", "lineno", "funcName", "created", "msecs", "relativeCreated", "thread", "threadName", "processName", "process", "message", "asctime"}
+            if k
+            not in {
+                "msg",
+                "args",
+                "levelname",
+                "levelno",
+                "pathname",
+                "filename",
+                "module",
+                "exc_info",
+                "exc_text",
+                "stack_info",
+                "lineno",
+                "funcName",
+                "created",
+                "msecs",
+                "relativeCreated",
+                "thread",
+                "threadName",
+                "processName",
+                "process",
+                "message",
+                "asctime",
+            }
             and not k.startswith("_")
         }
         extra_str = " ".join(f"{k}={v}" for k, v in extras.items())

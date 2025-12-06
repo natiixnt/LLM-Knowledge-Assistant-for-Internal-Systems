@@ -28,7 +28,9 @@ class AppSettings(BaseSettings):
     log_level: str = Field("INFO", description="Logging level")
     embeddings_batch_size: int = Field(64, description="Batch size for embedding creation")
     max_context_chunks: int = Field(8, description="Max number of document chunks to include in context")
-    similarity_threshold: float = Field(0.2, description="Cosine similarity cutoff; lower means looser matching")
+    similarity_threshold: float = Field(
+        0.2, description="Cosine similarity cutoff; lower means looser matching"
+    )
 
     def require_openai(self) -> None:
         if not self.openai.api_key:

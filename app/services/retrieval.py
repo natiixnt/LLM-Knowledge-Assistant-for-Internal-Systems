@@ -58,7 +58,10 @@ class RetrievalService:
         limited = [ctx for ctx in merged if ctx.score >= cutoff][: self._settings.max_context_chunks]
 
         latency_ms = int((time.perf_counter() - start) * 1000)
-        logger.info("retrieval.complete", extra={"latency_ms": latency_ms, "tenant_id": tenant_id, "results": len(limited)})
+        logger.info(
+            "retrieval.complete",
+            extra={"latency_ms": latency_ms, "tenant_id": tenant_id, "results": len(limited)},
+        )
         return limited
 
     async def _embed_query(self, question: str) -> list[float]:
@@ -93,7 +96,9 @@ class RetrievalService:
             )
         return contexts
 
-    def _score_chunks(self, query_embedding: Sequence[float], chunks: Iterable[DocumentChunk]) -> list[RetrievedContext]:
+    def _score_chunks(
+        self, query_embedding: Sequence[float], chunks: Iterable[DocumentChunk]
+    ) -> list[RetrievedContext]:
         scored: list[RetrievedContext] = []
         for chunk in chunks:
             if not chunk.embedding:

@@ -23,7 +23,9 @@ async def test_ingest_texts_creates_chunks():
     settings = AppSettings(
         env="test",
         db=DatabaseSettings(url="sqlite+aiosqlite:///:memory:", echo=False),
-        openai=OpenAISettings(api_key="dummy", model="gpt-3.5-turbo", embedding_model="text-embedding-3-small"),
+        openai=OpenAISettings(
+            api_key="dummy", model="gpt-3.5-turbo", embedding_model="text-embedding-3-small"
+        ),
     )
 
     svc = IngestionService(session_factory=async_session, embeddings=FakeEmbeddings(), settings=settings)

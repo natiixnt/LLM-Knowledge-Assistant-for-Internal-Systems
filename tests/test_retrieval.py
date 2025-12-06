@@ -51,7 +51,9 @@ async def test_retrieval_orders_by_similarity():
     settings = AppSettings(
         env="test",
         db=DatabaseSettings(url="sqlite+aiosqlite:///:memory:", echo=False),
-        openai=OpenAISettings(api_key="test-key", model="gpt-3.5-turbo", embedding_model="text-embedding-3-small"),
+        openai=OpenAISettings(
+            api_key="test-key", model="gpt-3.5-turbo", embedding_model="text-embedding-3-small"
+        ),
         similarity_threshold=0.0,
         max_context_chunks=2,
     )

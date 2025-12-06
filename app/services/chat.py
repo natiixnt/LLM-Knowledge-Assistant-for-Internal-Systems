@@ -98,12 +98,17 @@ class ChatService:
         sources = [c.source for c in contexts]
         logger.info(
             "chat.answer",
-            extra=ctx | {"latency_ms": latency_ms, "retrieval_ms": retrieval_ms, "llm_ms": llm_ms, "sources": sources},
+            extra=ctx
+            | {"latency_ms": latency_ms, "retrieval_ms": retrieval_ms, "llm_ms": llm_ms, "sources": sources},
         )
-        return ChatResult(answer=answer, sources=sources, latency_ms=latency_ms, retrieval_ms=retrieval_ms, llm_ms=llm_ms)
+        return ChatResult(
+            answer=answer, sources=sources, latency_ms=latency_ms, retrieval_ms=retrieval_ms, llm_ms=llm_ms
+        )
 
     def _build_prompt(self, question: str, contexts: list[RetrievedContext]) -> str:
-        context_block = "\n\n".join(f"Source {c.id} ({c.source}, score={c.score}):\n{c.content}" for c in contexts)
+        context_block = "\n\n".join(
+            f"Source {c.id} ({c.source}, score={c.score}):\n{c.content}" for c in contexts
+        )
         template = ChatPromptTemplate.from_template(
             "Use the provided sources to answer the question.\n"
             "Always cite source ids inline like [source:ID]. If unsure, say you do not know.\n\n"
