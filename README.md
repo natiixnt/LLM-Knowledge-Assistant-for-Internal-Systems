@@ -34,10 +34,10 @@ Postgres with pgvector runs on `localhost:5432`; API on `localhost:8000`.
 
 ## API
 
-- `POST /chat` — `{question, user_id, tenant_id?}` → `{answer, sources, latency_ms}` with enforced upstream timeout.
-- `GET /health`, `GET /ready` — health/readiness.
-- `POST /admin/ingest/text` — trigger ingestion of raw text/markdown for a tenant.
-- `GET /admin/status` — last ingestion timestamp.
+- `POST /chat` - `{question, user_id, tenant_id?}` → `{answer, sources, latency_ms}` with enforced upstream timeout.
+- `GET /health`, `GET /ready` - health/readiness.
+- `POST /admin/ingest/text` - trigger ingestion of raw text/markdown for a tenant.
+- `GET /admin/status` - last ingestion timestamp.
 
 ## Architecture Notes
 
@@ -58,8 +58,8 @@ GitHub Actions workflow runs ruff format/lint and pytest on each push/PR.
 
 ## Scripts
 
-- `python -m scripts.init_db` — create tables.
-- `python -m scripts.run_etl_example` — example ingestion of sample text.
+- `python -m scripts.init_db` - create tables.
+- `python -m scripts.run_etl_example` - example ingestion of sample text.
 
 ## Future Enhancements
 
